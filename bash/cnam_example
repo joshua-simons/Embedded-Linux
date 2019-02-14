@@ -1,0 +1,49 @@
+#!/bin/bash
+clear
+NUM="$1"
+NPA=${NUM:0:3}
+NXX=${NUM:3:3}
+
+echo Performing Dip on $NUM
+
+DATA=$(curl -s http://www.telcodata.us/query/queryexchangevalid.html?npa=$NPA\&nxx=$NXX)
+
+TEMPCLLI=`echo $DATA | awk -F "=" '{ print $8 }'`
+
+echo $TEMPCLLI
+echo  
+echo $DATA
+
+#CLLI=`echo $TEMPCLLI| awk -F " " '{ print $1 }'`
+
+#Same thing, one line:
+#CLLI=`echo $DATA | awk -F "=" '{ print $8 }' | awk -F " " '{ print $1 }'`
+
+#TEMPSTATE=`echo $DATA| awk -F "=" '{ print $9 }'`
+#STATE=`echo $TEMPSTATE| awk -F " " '{ print $1 }'`
+
+#TEMPRATE=`echo $DATA| awk -F "=" '{ print $10 }'`
+#RATECENTER=`echo $TEMPRATE| awk -F " " '{ print $1 }'`
+
+#TEMPLOC=`echo $DATA| awk -F "=" '{ print $14 }'`
+#LOC=`echo $TEMPLOC| awk -F " " '{ print $1" "$2" "$3}'`
+
+#TEMPOCN=`echo $DATA| awk -F "=" '{ print $11 }'`
+#OCN=`echo $TEMPOCN| awk -F " " '{ print $1 }'`
+
+#SWITCH=`echo $DATA| awk -F "=" '{ print $16 }'`
+
+#TYPE=`echo $DATA| awk -F "=" '{ print $18 }'`
+
+     
+
+#     echo Type: $TYPE
+#     echo CLLI: $CLLI
+#     echo Rate Center: $RATECENTER
+#     echo Location: $LOC
+#     echo Operating Company Number "(OCN)": $OCN
+#     echo Switch Type: $SWITCH
+#     echo Company Type: $TYPE
+#     echo -e "\n"
+
+
