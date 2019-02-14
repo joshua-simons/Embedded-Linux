@@ -4,4 +4,4 @@ Hello, and welcome to Josh Simons's repository for the embedded linux class.  Th
 
 # Branch Notes
 
-**blinkTemp:** This branch is to integrate the DH11 (or DH22 in my case) Temperature and humidity sensor into the project. temp.py should serve as a simple test to get the sensor readings to output into the shell. blinkTemp.py should merge this functionality with blink.py.
+**tempLog:** This branch adds to the blinkTemp branch by adding logging capability to blinkTemp.py.  The logging script is blinkLog.py
