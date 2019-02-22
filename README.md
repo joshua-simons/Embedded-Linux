@@ -4,4 +4,4 @@ Hello, and welcome to Josh Simons's repository for the embedded linux class.  Th
 
 # Branch Notes
 
-**tempLog:** This branch adds to the blinkTemp branch by adding logging capability to blinkTemp.py.  The logging script is blinkLog.py
+**test** This is a test
