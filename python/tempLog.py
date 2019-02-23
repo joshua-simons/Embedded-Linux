@@ -48,7 +48,7 @@ def readF(tempPin):
 
 	return tempFahr
 
-def readH():
+def readH(tempPin):
 	humidity, temperature = Adafruit_DHT.read_retry(tempSensor, tempPin)
 	if humidity is not None and temperature is not None:
 		humid = '{1:0.1f}%'.format(temperature, humidity)
