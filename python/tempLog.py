@@ -72,12 +72,12 @@ try:
 				data2 = readH(tempPin)
 				print ('The Temperature is '+data1)
 				print ('The humidity is '+data2)
-				log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(data1),str(data)))
+				log.write("{0},{1},{2}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(data1),str(data2)))
 				log.flush()
 				os.fsync(log)
 
 except KeyboardInterrupt:
-	os.system('clear')
+#	os.system('clear')
 	print('Thanks for Blinking and Thinking!')
 	GPIO.cleanup()
 
