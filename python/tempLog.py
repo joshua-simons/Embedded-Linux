@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import Adafruit_DHT
 import time
 import os
+import sys
 
 #Assign GPIO pins
 redPin = 27
@@ -63,16 +64,26 @@ try:
 
 		while True:
 			input_state = GPIO.input(buttonPin)
-			if input_state == False:			
+			if input_state == False:
 				for i in range (blinkTime):
 					oneBlink(redPin)
 				time.sleep(.2)
+<<<<<<< HEAD
 				data1 = readF(tempPin)
 				data2 = readH(tempPin)
 				print ('The Temperature is '+data1)
 				print ('The humidity is '+data2)
 				log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(data1),str(data2)))
 			
+=======
+				data = readF(tempPin)
+				print (data)
+				log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(data)))
+				log.flush()
+				os.fsync(log)
+
+
+>>>>>>> 281e29209da9fc36daf0d27e6d330bb41ed69f6a
 except KeyboardInterrupt:
 	os.system('clear')
 	print('Thanks for Blinking and Thinking!')
