@@ -5,17 +5,25 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Raspberry Pi Project Home</title>
 
-		<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="js/jquery-csv.js"></script>
-		<script src="js/csv2array.js"></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+		<script src="js/csv2array.js"></script>
+		<script src="js/datavis.js"></script>
 
 	</head>
 
-	<body>
+	<body onload="drawChart()">
 
 		<H1>This button will read the templog.csv into an array and print it to the console</H1>
 		<p></p>
 		<button onclick="readCSV()">Read CSV</button>
+		<br/>
+		<br/>
+		<div id="curve_chart" style="width: 900px; height: 500px"></div>
+
+		
+
 	</body>
 </html>

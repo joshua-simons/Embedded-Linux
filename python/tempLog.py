@@ -42,7 +42,7 @@ def readF(tempPin):
 	humidity, temperature = Adafruit_DHT.read_retry(tempSensor, tempPin)
 	temperature = temperature * 9/5.0 +32
 	if humidity is not None and temperature is not None:
-		tempFahr = '{0:0.1f}*F'.format(temperature)
+		tempFahr = '{0:0.1f}'.format(temperature)
 	else:
 		print('Error Reading Sensor')
 
@@ -51,7 +51,7 @@ def readF(tempPin):
 def readH(tempPin):
 	humidity, temperature = Adafruit_DHT.read_retry(tempSensor, tempPin)
 	if humidity is not None and temperature is not None:
-		humid = '{1:0.1f}%'.format(temperature, humidity)
+		humid = '{1:0.1f}'.format(temperature, humidity)
 	else:
 		print('Error Reading Sensor')
 
@@ -70,9 +70,9 @@ try:
 				time.sleep(.2)
 				data1 = readF(tempPin)
 				data2 = readH(tempPin)
-				print ('The Temperature is '+data1)
-				print ('The humidity is '+data2)
-				log.write("{0},{1},{2}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(data1),str(data2)))
+				print ('The Temperature is '+data1+'*F')
+				print ('The Humidity is '+data2+'%')
+				log.write("{0},{1},{2}\n".format(time.strftime('new Date(%Y,%m,%d,%H,%M,%S)'),data1,data2))
 				log.flush()
 				os.fsync(log)
 
