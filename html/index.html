@@ -3,14 +3,19 @@
 
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		
 		<title>Raspberry Pi Project Home</title>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="js/jquery-csv.js"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-		<script src="js/csv2array.js"></script>
 		<script src="js/datavis.js"></script>
+		<script src="js/csv2array.js"></script>
+	
+		<script>var chartData = [];</script>
 
 	</head>
 
@@ -21,7 +26,7 @@
 		<button onclick="readCSV()">Read CSV</button>
 		<br/>
 		<br/>
-		<div id="curve_chart" style="width: 900px; height: 500px"></div>
+		<div id="curve_chart" style="width: 1200px; height: 1200px"></div>
 
 		
 

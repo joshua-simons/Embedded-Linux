@@ -9,7 +9,6 @@ import sys
 redPin = 27
 greenPin = 22
 tempPin = 17
-buttonPin = 26
 
 #Temp and Humidity Sensor
 tempSensor = Adafruit_DHT.DHT22
@@ -58,23 +57,21 @@ def readH(tempPin):
 	return humid
 
 #Use the blinkonce function in a loopity-loop when the button is pressed
-try:
 
+try:
 	with open("../log/templog.csv", "a") as log:
 
 		while True:
-			input_state = GPIO.input(buttonPin)
-			if input_state == False:
-				for i in range (blinkTime):
-					oneBlink(redPin)
-				time.sleep(.2)
-				data1 = readF(tempPin)
-				data2 = readH(tempPin)
-				print ('The Temperature is '+data1+'*F')
-				print ('The Humidity is '+data2+'%')
-				log.write("{0},{1},{2}\n".format(time.strftime('new Date(%Y,%m,%d,%H,%M,%S)'),data1,data2))
-				log.flush()
-				os.fsync(log)
+			for i in range (blinkTime):
+				oneBlink(redPin)
+			data1 = readF(tempPin)
+			data2 = readH(tempPin)
+			print ('The Temperature is '+data1+'*F')
+			print ('The Humidity is '+data2+'%')
+			log.write("{0},{1},{2}\n".format(time.strftime('%Y,%m,%d,%H,%M,%S'),data1,data2))
+			log.flush()
+			os.fsync(log)
+			time.sleep(60)
 
 except KeyboardInterrupt:
 #	os.system('clear')
