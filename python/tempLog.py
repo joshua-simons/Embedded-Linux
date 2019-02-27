@@ -34,6 +34,7 @@ def redBlink(pin):
 	time.sleep(blinkDur)
 
 def greenLight(pin):
+	GPIO.output(redPin,False)
 	GPIO.output(pin, True)
 
 def readF(tempPin):
