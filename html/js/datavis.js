@@ -1,14 +1,26 @@
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.load('current', {packages:['gauge']});
 
-  function update(){
+//  function update(){
+//    xTime = new Date();
+//    console.clear();
+//    console.log('Updating Charts! '+xTime)
+//    drawChart()
+//  }
+
+
+function go(){
+  drawChart();
+  setInterval(function() {
     xTime = new Date();
     console.clear();
-    console.log('Updating Charts! '+xTime)
+    console.log('Updated Chart: '+xTime);
     drawChart();
-  }
+    }, 60000);
+}
 
-  function drawChart() {
+
+function drawChart() {
     $.ajax({
       type: "GET",
       url: "log/templog.csv",
@@ -16,7 +28,6 @@ google.charts.load('current', {packages:['gauge']});
       success: function(response)
       {
       chartData = $.csv.toArrays(response, {onParseValue: $.csv.hooks.castToScalar});
-      console.log(chartData);
 
       var rows = chartData.length;
       var chartArray = [];
@@ -53,19 +64,10 @@ google.charts.load('current', {packages:['gauge']});
                 redFrom: 88, redTo: 120,
                 yellowFrom:78, yellowTo: 120,
                 greenFrom:68, greenTo: 120,
-                blueFrom:0, blueTo:120,
                 minorTicks: 5
           };
 
           var gauge = new google.visualization.Gauge(document.getElementById('gauge'));
           gauge.draw(g2data, options2);
-
-        setInterval(function(){update()
-//          lastRow = chartData[chartData.length - 1];
-//          temp = lastRow[lastRow.length - 2];
-//          g2data.setValue(0,0, temp);
-//          gauge.draw(g2data, options2);
-        },60000);
-
     }});      
    }
