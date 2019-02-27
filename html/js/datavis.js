@@ -1,9 +1,12 @@
 google.charts.load('current', { packages: ['corechart'] });
 google.charts.load('current', {packages:['gauge']});
 
-//  function update(){
-//    drawChart();
-//  }
+  function update(){
+    xTime = new Date();
+    console.clear();
+    console.log('Updating Charts! '+xTime)
+    drawChart();
+  }
 
   function drawChart() {
     $.ajax({
@@ -13,7 +16,7 @@ google.charts.load('current', {packages:['gauge']});
       success: function(response)
       {
       chartData = $.csv.toArrays(response, {onParseValue: $.csv.hooks.castToScalar});
-//      console.log(chartData);
+      console.log(chartData);
 
       var rows = chartData.length;
       var chartArray = [];
@@ -57,11 +60,11 @@ google.charts.load('current', {packages:['gauge']});
           var gauge = new google.visualization.Gauge(document.getElementById('gauge'));
           gauge.draw(g2data, options2);
 
-        setInterval(function(){
-          lastRow = chartData[chartData.length - 1];
-          temp = lastRow[lastRow.length - 2];
-          g2data.setValue(1,1, temp);
-          gauge.draw(g2data, options2);
+        setInterval(function(){update()
+//          lastRow = chartData[chartData.length - 1];
+//          temp = lastRow[lastRow.length - 2];
+//          g2data.setValue(0,0, temp);
+//          gauge.draw(g2data, options2);
         },60000);
 
     }});      
