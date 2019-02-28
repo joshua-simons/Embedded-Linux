@@ -44,7 +44,7 @@ function drawChart() {
 
          var options = {
             title: 'Temperture & Humidity Log',
- //           curveType: 'function',
+            curveType: 'function',
             legend: { position: 'bottom' }
          };
 

@@ -11,9 +11,7 @@ redPin = 27
 greenPin = 22
 tempPin = 17
 
-#Set variables globally first because reasons
-data1 = 70
-eChk = 0
+#eChk = 0
 old_time = 60
 
 #Temp and Humidity Sensor
@@ -68,9 +66,8 @@ def readH(tempPin):
 
 	return humid
 
-def alert():
+def alert(data1):
 	global eChk
-	global data1
 	if eChk == 0:
 				Text = "The monitor now indicates that the temperature is now "+str(data1)
 				eMessage = 'Subject: {}\n\n{}'.format(Subject, Text)
@@ -79,17 +76,19 @@ def alert():
 				server.quit
 				eChk = 1
 
+
 data1 = readF(tempPin)
 
 try:
 	with open("../log/templog.csv", "a") as log:
 
 		while True:
+			global eChk
 			if 68 <= float(data1) <= 78:
 				eChk = 0
 				greenLight(greenPin)
 			else:
-				alert()
+				alert(data1)
 				GPIO.output(greenPin, False)
 				redBlink(redPin)
 
@@ -98,6 +97,7 @@ try:
 				data2 = readH(tempPin)
 				print ('The Temperature is '+data1+'*F')
 				print ('The Humidity is '+data2+'%')
+				print (eChk)
 				log.write("{0},{1},{2}\n".format(time.strftime('%Y,%m,%d,%H,%M,%S'),data1,data2))
 				log.flush()
 				os.fsync(log)
