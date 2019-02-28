@@ -11,6 +11,11 @@ redPin = 27
 greenPin = 22
 tempPin = 17
 
+#Set variables globally first because reasons
+data1 = 70
+eChk = 0
+old_time = 60
+
 #Temp and Humidity Sensor
 tempSensor = Adafruit_DHT.DHT22
 #LED Variables-----------------------------------------------------------------------------------------
@@ -26,8 +31,6 @@ sensorDelay = 60
 eFROM = "kd2egt@gmail.com"
 eTO = "8453094409@msg.fi.google.com"
 Subject = "Temperature Warning"
-Text = "The monitor now indicates that the temperature is now "+str(data1)
-eMessage = 'Subject: {}\n\n{}'.format(Subject, Text)
 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 #------------------------------------------------------------------------------------------------------
 
@@ -65,7 +68,17 @@ def readH(tempPin):
 
 	return humid
 
-old_time = 60
+def alert():
+	global eChk
+	global data1
+	if eChk == 0:
+				Text = "The monitor now indicates that the temperature is now "+str(data1)
+				eMessage = 'Subject: {}\n\n{}'.format(Subject, Text)
+				server.login("kd2egt@gmail.com", "ybihbernfcvynzju")
+				server.sendmail(eFROM, eTO, eMessage)
+				server.quit
+				eChk = 1
+
 data1 = readF(tempPin)
 
 try:
@@ -73,12 +86,11 @@ try:
 
 		while True:
 			if 68 <= float(data1) <= 78:
+				eChk = 0
 				greenLight(greenPin)
 			else:
+				alert()
 				GPIO.output(greenPin, False)
-				server.login("kd2egt@gmail.com", "ybihbernfcvynzju")
-				server.sendmail(eFROM, eTO, eMessage)
-				server.quit
 				redBlink(redPin)
 
 			if time.time() - old_time > 59:
