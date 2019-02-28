@@ -4,6 +4,7 @@ import Adafruit_DHT
 import time
 import os
 import sys
+import smtplib
 
 #Assign GPIO pins
 redPin = 27
@@ -20,6 +21,14 @@ blinkTime = 7
 #------------------------------------------------------------------------------------------------------
 #Time between sensor readings
 sensorDelay = 60
+#------------------------------------------------------------------------------------------------------
+#SMTP eMail Variables
+eFROM = "kd2egt@gmail.com"
+eTO = "8453094409@msg.fi.google.com"
+Subject = "Temperature Warning"
+Text = "The monitor now indicates that the temperature is now "+str(data1)
+eMessage = 'Subject: {}\n\n{}'.format(Subject, Text)
+server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 #------------------------------------------------------------------------------------------------------
 
 #Initialize the GPIO
@@ -67,6 +76,9 @@ try:
 				greenLight(greenPin)
 			else:
 				GPIO.output(greenPin, False)
+				server.login("kd2egt@gmail.com", "ybihbernfcvynzju")
+				server.sendmail(eFROM, eTO, eMessage)
+				server.quit
 				redBlink(redPin)
 
 			if time.time() - old_time > 59:

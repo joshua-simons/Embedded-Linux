@@ -43,7 +43,7 @@ function drawChart() {
         }              
 
          var options = {
-            title: 'Temperture Log',
+            title: 'Temperture & Humidity Log',
  //           curveType: 'function',
             legend: { position: 'bottom' }
          };
