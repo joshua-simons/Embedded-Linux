@@ -1,10 +1,8 @@
 #Import Libraries we will be using
 from flask import Flask, render_template, jsonify, Response
-import RPi.GPIO as GPIO
 import time
 import os
 import sqlite3 as sqlite
-import sys
 import smtplib
 import json
 import threading
@@ -14,6 +12,10 @@ eFROM = "kd2egt@gmail.com"
 eTO = "8453094409@msg.fi.google.com"
 Subject = "Alert!"
 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+
+#Connect to the database
+con = sqlite.connect('../log/templog.db', check_same_thread=False)
+cur = con.cursor()
 
 def alert(data):
 	global eChk
@@ -38,14 +40,43 @@ def readF():
 	tempF = '{0:0.1f}'.format(tempC * 9.0 / 5.0 + 32.0)
 	return tempF
 
-def temp_loop():
-	#Connect to the database
-	con = sqlite.connect('../log/templog.db', check_same_thread=False)
-	cur = con.cursor()
+
+#Dummy time for first itteration of the loop
+oldTime = 60
+#Read Temperature right off the bat
+data = readF()
+
+#Set up Flask server to serve out the web page and set the latest temperature to "temp1" as well as return a json of the database when '/sqlData' is called
+def flask_thread():
+	app = Flask(__name__)
+	@app.route("/")
+	def index():
+		cur.execute("SELECT * FROM templog ORDER BY Date DESC LIMIT 1")
+		result = cur.fetchone()
+		temp1 = result[1]
+		temp1 = temp1[:-2]
+		return render_template('index.html', temp1 = temp1)
+	@app.route("/sqlData")
+	def chartData():
+		con.row_factory = sqlite.Row
+		cur.execute("SELECT * FROM templog")
+		dataset = cur.fetchall()
+		chartData = []
+		for row in dataset:
+			chartData.append({"Date": row[0], "Temperature": float(row[1])})
+		return Response(json.dumps(chartData), mimetype='application/json')
+
+	if __name__ == "__main__":
+		app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
+
+
+webApp_thread = threading.Thread(name='Web App', target = flask_thread)
+webApp_thread.setDaemon(True)
+webApp_thread.start()
+
+try:
 	while True:
-		#Send text message alert if temperature is out of range
-		global data
-		global oldTime
+	#Send text message alert if temperature is out of range
 		global eChk
 		if 68 <= float(data) <= 78:
 			eChk = 0
@@ -70,54 +101,8 @@ def temp_loop():
 			#Resets the oldTime to begin the countdown again
 			oldTime = time.time()
 
-#Dummy time for first itteration of the loop
-oldTime = 60
-#Read Temperature right off the bat
-data = readF()
-
-#Connect to the database
-con = sqlite.connect('../log/templog.db', check_same_thread=False)
-cur = con.cursor()
-
-#Set up Flask server to serve out the web page and set the latest temperature to "temp1" as well as return a json of the database when '/sqlData' is called
-def flask_thread():
-	con = sqlite.connect('../log/templog.db', check_same_thread=False)
-	cur = con.cursor()
-	app = Flask(__name__)
-	@app.route("/")
-	def index():
-		cur.execute("SELECT * FROM templog ORDER BY Date DESC LIMIT 1")
-		result = cur.fetchone()
-		temp1 = result[1]
-		temp1 = temp1[:-2]
-		return render_template('index.html', temp1 = temp1)
-	@app.route("/sqlData")
-	def chartData():
-		con.row_factory = sqlite.Row
-		cur.execute("SELECT * FROM templog")
-		dataset = cur.fetchall()
-		chartData = []
-		for row in dataset:
-			chartData.append({"Date": row[0], "Temperature": float(row[1])})
-		return Response(json.dumps(chartData), mimetype='application/json')
-
-	if __name__ == "__main__":
-		app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False, threaded=True)
-
-
-webApp_thread = threading.Thread(name='Web App', target = flask_thread)
-webApp_thread.setDaemon(True)
-webApp_thread.start()
-tempLog_thread = threading.Thread(name='Temperature Logger', target = temp_loop)
-tempLog_thread.setDaemon(True)
-tempLog_thread.start()
-
-try:
-	while True:
-		time.sleep(1)
-
 except KeyboardInterrupt:
 	os.system('clear')
+	con.close()
 	print ("Temperature Logger and Web App Exited Cleanly")
 	exit(0)
-	
