@@ -39,7 +39,8 @@ function drawChart() {
               ]);
 
         for (var i = 0; i < rows; i++) {
-          gdata.addRow([new Date(chartData[i][0],chartData[i][1],chartData[i][2],chartData[i][3],chartData[i][4],chartData[i][5]), chartData[i][6], chartData[i][7]]);
+          var fixDate = (chartData[i][1])-1;
+          gdata.addRow([new Date(chartData[i][0],fixDate,chartData[i][2],chartData[i][3],chartData[i][4],chartData[i][5]), chartData[i][6], chartData[i][7]]);
         }              
 
          var options = {

@@ -11,7 +11,7 @@ redPin = 27
 greenPin = 22
 tempPin = 17
 
-#eChk = 0
+eChk = 0
 old_time = 60
 
 #Temp and Humidity Sensor
@@ -69,7 +69,7 @@ def readH(tempPin):
 def alert(data1):
 	global eChk
 	if eChk == 0:
-				Text = "The monitor now indicates that the temperature is now "+str(data1)
+				Text = "Hail Hydra! The temperature is now "+str(data1)
 				eMessage = 'Subject: {}\n\n{}'.format(Subject, Text)
 				server.login("kd2egt@gmail.com", "ybihbernfcvynzju")
 				server.sendmail(eFROM, eTO, eMessage)
