@@ -102,7 +102,7 @@ def flask_thread():
 		return Response(json.dumps(chartData), mimetype='application/json')
 
 	if __name__ == "__main__":
-		app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
+		app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False, threaded=True)
 
 
 webApp_thread = threading.Thread(name='Web App', target = flask_thread)
