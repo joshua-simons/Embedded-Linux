@@ -4,7 +4,8 @@ Hello, and welcome to Josh Simons's repository for the embedded linux class.  Th
 
 # Branch Notes
 
-**tempLog:** This branch adds to the blinkTemp branch by adding logging capability to blinkTemp.py.  The logging script is blinkLog.py
+**tempFlask:** This branch is an alternative to tempWeb that uses Flask instead of lighttpd, and sqlite3 instead of reading the .csv directly.
+the code all resides in flaskRoot.  The static directory hosts static .js and .css files necessary to serve the page.  The tempServer.py file starts the logging and web servers.  Temperature logging was changed to utilize the i2c sensor instead of the DH22 sensor.
 
 #lighttpd
 
