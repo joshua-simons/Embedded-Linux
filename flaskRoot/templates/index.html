@@ -46,7 +46,6 @@
 					for (i = 0; i < chartJSON.length; i++){
 						chartData.push([new Date(chartJSON[i].Date), chartJSON[i].Temperature]);
 					};
-					successTime = new Date();
 					drawGauge();
 					drawChart();
 				});
