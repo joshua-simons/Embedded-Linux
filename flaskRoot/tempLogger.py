@@ -14,7 +14,7 @@ Subject = "Alert!"
 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 
 #Connect to the database
-con = sqlite.connect('../log/templog.db', check_same_thread=False)
+con = sqlite.connect('../log/templog.db')
 cur = con.cursor()
 
 def alert(data):
@@ -48,30 +48,30 @@ data = readF()
 
 #Set up Flask server to serve out the web page and set the latest temperature to "temp1" as well as return a json of the database when '/sqlData' is called
 def flask_thread():
+	con1 = sqlite.connect('../log/templog.db', check_same_thread=False)
+	cur1 = con1.cursor()
 	app = Flask(__name__)
+	
 	@app.route("/")
 	def index():
-		cur.execute("SELECT * FROM templog ORDER BY Date DESC LIMIT 1")
-		result = cur.fetchone()
-		temp1 = result[1]
-		temp1 = temp1[:-2]
-		return render_template('index.html', temp1 = temp1)
+		return render_template('index.html')
+	
 	@app.route("/sqlData")
 	def chartData():
-		con.row_factory = sqlite.Row
-		cur.execute("SELECT * FROM templog")
-		dataset = cur.fetchall()
+		con1.row_factory = sqlite.Row
+		cur1.execute("SELECT * FROM templog")
+		dataset = cur1.fetchall()
 		chartData = []
 		for row in dataset:
 			chartData.append({"Date": row[0], "Temperature": float(row[1])})
 		return Response(json.dumps(chartData), mimetype='application/json')
-
+	
 	if __name__ == "__main__":
 		app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
 
 
-webApp_thread = threading.Thread(name='Web App', target = flask_thread)
-webApp_thread.setDaemon(True)
+webApp_thread = threading.Thread(target = flask_thread)
+webApp_thread.daemon = True
 webApp_thread.start()
 
 try:
@@ -86,19 +86,14 @@ try:
 		if time.time() - oldTime > 59:
 			data = readF()
 			if not data:
-				sleep(20)
+				sleep(5)
 				continue
 			#Defines and executes the sql query (templog is the table name in the .db)
 			query = "INSERT INTO templog (Date, Temperature) VALUES ('{}', '{}');"
 			query = query.format(time.strftime("%Y-%m-%d %H:%M:%S"), data)
 			cur.execute(query)
 			con.commit()
-			#Clear the console, and query the database. Prints the results to the console
-			os.system('clear')
-			print("Date, Temperature")
-			for row in cur.execute('SELECT * FROM templog;'):
-				print("{}, {}".format(row[0], row[1]))
-			#Resets the oldTime to begin the countdown again
+			print(time.strftime("%Y-%m-%d %H:%M:%S")+" "+data)
 			oldTime = time.time()
 
 except KeyboardInterrupt:
