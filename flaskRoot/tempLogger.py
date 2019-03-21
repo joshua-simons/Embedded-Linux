@@ -46,7 +46,7 @@ oldTime = 60
 #Read Temperature right off the bat
 data = readF()
 
-#Set up Flask server to serve out the web page and set the latest temperature to "temp1" as well as return a json of the database when '/sqlData' is called
+#Set up Flask server to serve out the web page and return a json of the database when '/sqlData' is called
 def flask_thread():
 	con1 = sqlite.connect('../log/templog.db', check_same_thread=False)
 	cur1 = con1.cursor()
