@@ -17,10 +17,12 @@ server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 con = sqlite.connect('../log/templog.db')
 cur = con.cursor()
 
+eChk = 0
+
 def alert(data):
 	global eChk
 	if eChk == 0:
-		Text = "The monitor now indicates that the temperature is now "+str(data1)
+		Text = "The monitor now indicates that the temperature is now "+str(data)
 		eMessage = 'Subject: {}\n\n{}'.format(Subject, Text)
 		server.login("kd2egt@gmail.com", "ybihbernfcvynzju")
 		server.sendmail(eFROM, eTO, eMessage)
@@ -77,7 +79,6 @@ webApp_thread.start()
 try:
 	while True:
 	#Send text message alert if temperature is out of range
-		global eChk
 		if 68 <= float(data) <= 78:
 			eChk = 0
 		else:
