@@ -3,10 +3,9 @@ import time
 import os
 import smtplib
 import json
+import sqlite3
 
-eChk = 0
 old_time = 60
-
 
 #Time between sensor readings
 sensorDelay = 60
@@ -19,14 +18,8 @@ server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 #------------------------------------------------------------------------------------------------------
 
 #Connect to the database
-con = sqlite.connect('../log/templog.db')
+con = sqlite3.connect('log/templog.db')
 cur = con.cursor()
-
-#Initialize the GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(redPin,GPIO.OUT)
-GPIO.setup(greenPin,GPIO.OUT)
-
 
 def alert(data):
 	global eChk

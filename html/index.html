@@ -11,26 +11,82 @@
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-		<script src="js/jquery-csv.js"></script>
-		<script src="js/datavis.js"></script>
-		<script src="js/csv2array.js"></script>
-	
-		<script>var chartData = [];</script>
-
 	</head>
 
 	<body onload="go()">
 
-		<H1>This button will read the templog.csv into an array and print it to the console</H1>
-		<p></p>
-		<button onclick="readCSV()">Read CSV</button>
-		<br/>
 		<center>
 			<div id="gauge" style="width: 250px; height: 250px"></div>
 			<div id="curve_chart" style="width: 1200px; height: 1200px"></div>
 		</center>
 
-		
+		<script type='text/javascript'>
+			//Load the charts libraries
+			google.charts.load('current', {packages:['gauge']});
+			google.charts.load('current', { packages: ['corechart'] });
+			//create empty array as a global
+			var chartData = [];
+			//This function is called when the page loads
+			function go(){
+				goTime = new Date();
+				console.log('It\'s Go Time! '+goTime);
+				getData();
+				setInterval(function() {
+					xTime = new Date();
+					console.clear();
+					console.log('Update Initiated: '+xTime);
+					getData();
+				}, 60000);
+			}
+			//grabs the data from the sqlData app.route and pushes it into an array
+			function getData(){
+				//Clear the array first
+				chartData = [];
+				$.getJSON('/cgi-bin/dataGrab.py', function(chartJSON) {
+					for (i = 0; i < chartJSON.length; i++){
+						chartData.push([new Date(chartJSON[i].Date), chartJSON[i].Temperature]);
+					};
+					drawGauge();
+					drawChart();
+				});
+			}
+			//Draws the gauge
+			function drawGauge() {
+				var g2data = new google.visualization.arrayToDataTable([
+					[ {label: 'Temperature', id:'temp', type: 'number'} ]
+				]);
+				lastRow = chartData[chartData.length - 1];
+				temp1 = lastRow[lastRow.length - 1];
+				g2data.addRow([temp1]);              
+				var options2 = {
+				    redFrom: 88, redTo: 120,
+				    yellowFrom:78, yellowTo: 120,
+				    greenFrom:68, greenTo: 120,
+				    minorTicks: 5
+				};
+			    var gauge = new google.visualization.Gauge(document.getElementById('gauge'));
+			    gauge.draw(g2data, options2);
+			    gaugeTime = new Date();
+			    console.log('Gauge Drawn: '+gaugeTime);
+	        }
+	        //Draws the chart
+	        function drawChart() {
+						var gdata = new google.visualization.DataTable();
+						gdata.addColumn('date', 'Date');
+						gdata.addColumn('number', 'Temperature');
+						gdata.addRows(chartData);
+						var options = {
+	            			title: 'Temperture Log',
+	            			curveType: 'function',
+	            			legend: { position: 'bottom' }
+	        			};
+	        			var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+	        			chart.draw(gdata, options);
+	        			chartTime = new Date();
+			}
+		</script>
+
 
 	</body>
+
 </html>
