@@ -66,8 +66,6 @@
 				};
 			    var gauge = new google.visualization.Gauge(document.getElementById('gauge'));
 			    gauge.draw(g2data, options2);
-			    gaugeTime = new Date();
-			    console.log('Gauge Drawn: '+gaugeTime);
 	        }
 	        //Draws the chart
 	        function drawChart() {
@@ -82,7 +80,6 @@
 	        			};
 	        			var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 	        			chart.draw(gdata, options);
-	        			chartTime = new Date();
 			}
 		</script>
 
