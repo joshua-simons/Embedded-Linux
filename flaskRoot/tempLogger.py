@@ -53,11 +53,11 @@ def flask_thread():
 	con1 = sqlite.connect('../log/templog.db', check_same_thread=False)
 	cur1 = con1.cursor()
 	app = Flask(__name__)
-	
+
 	@app.route("/")
 	def index():
 		return render_template('index.html')
-	
+
 	@app.route("/sqlData")
 	def chartData():
 		con1.row_factory = sqlite.Row
@@ -67,7 +67,7 @@ def flask_thread():
 		for row in dataset:
 			chartData.append({"Date": row[0], "Temperature": float(row[1])})
 		return Response(json.dumps(chartData), mimetype='application/json')
-	
+
 	if __name__ == "__main__":
 		app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
 
