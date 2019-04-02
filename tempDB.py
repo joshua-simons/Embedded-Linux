@@ -13,7 +13,7 @@ sensorDelay = 60
 #SMTP eMail Variables
 eFROM = "kd2egt@gmail.com"
 eTO = "8453094409@msg.fi.google.com"
-Subject = "Temperature Warning"
+Subject = "Danger: Impending Doom"
 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 #------------------------------------------------------------------------------------------------------
 
@@ -21,10 +21,12 @@ server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 con = sqlite3.connect('log/templog.db')
 cur = con.cursor()
 
+eChk = 0
+
 def alert(data):
 	global eChk
 	if eChk == 0:
-		Text = "The monitor now indicates that the temperature is now "+str(data1)
+		Text = "The monitor now indicates that the temperature is now "+str(data)
 		eMessage = 'Subject: {}\n\n{}'.format(Subject, Text)
 		server.login("kd2egt@gmail.com", "ybihbernfcvynzju")
 		server.sendmail(eFROM, eTO, eMessage)
