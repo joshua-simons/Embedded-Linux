@@ -6,7 +6,7 @@
 		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 		<meta http-equiv="Pragma" content="no-cache" />
 		<meta http-equiv="Expires" content="0" />
-		
+
 		<title>Raspberry Pi Temperature</title>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -43,6 +43,7 @@
 				//Clear the array first
 				chartData = [];
 				$.getJSON('/sqlData', function(chartJSON) {
+					console.log(chartJSON);
 					for (i = 0; i < chartJSON.length; i++){
 						chartData.push([new Date(chartJSON[i].Date), chartJSON[i].Temperature]);
 					};

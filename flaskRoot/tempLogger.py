@@ -63,6 +63,7 @@ def flask_thread():
 		con1.row_factory = sqlite.Row
 		cur1.execute("SELECT * FROM templog")
 		dataset = cur1.fetchall()
+		print (dataset)
 		chartData = []
 		for row in dataset:
 			chartData.append({"Date": row[0], "Temperature": float(row[1])})
@@ -87,7 +88,7 @@ try:
 		if time.time() - oldTime > 59:
 			data = readF()
 			if not data:
-				sleep(5)
+				time.sleep(5)
 				continue
 			#Defines and executes the sql query (templog is the table name in the .db)
 			query = "INSERT INTO templog (Date, Temperature) VALUES ('{}', '{}');"
