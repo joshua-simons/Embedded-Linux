@@ -38,7 +38,7 @@ def readF(tempPin):
 		tempFahr = '{0:0.1f}*F'.format(temperature)
 	else:
 		print('Error Reading Sensor')
-	
+
 	return tempFahr
 
 #def readH():
@@ -51,13 +51,13 @@ def readF(tempPin):
 try:
 	while True:
 		input_state = GPIO.input(buttonPin)
-		if input_state == False:			
+		if input_state == False:
 			for i in range (blinkTime):
 				oneBlink(redPin)
 			time.sleep(.2)
 			data = readF(tempPin)
 			print (data)
-			
+
 except KeyboardInterrupt:
 	os.system('clear')
 	print('Thanks for Blinking and Thinking!')
